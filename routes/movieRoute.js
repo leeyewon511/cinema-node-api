@@ -6,13 +6,14 @@ const db = require('../db')
 
 // 1. 영화 등록
 router.post('/', async (req, res) => {
-    try {
+    
         // 1. 관리자가 영화 정보를 입력하여 요청한다
         // 2. 요청값이 빠졌을 시 입력되지 않은 란이 있음을 반환한다.
         // 3. 개봉일이 종영일보다 늦은지 확인한다.
         // 3-1. 늦으면 개봉일 재확인 반환한다.
         // 4. 전부 맞을 시 db에 insert한다.
 
+    try {
         const { post, title, genre, prolog, release_date, end_date, movie_status } = req.body
 
         if (!post || !title || !genre || !prolog || !release_date || !end_date || !movie_status) {
@@ -57,28 +58,30 @@ router.patch('/:id', async (req, res) => {
         const { id } = req.params
         const { post, title, genre, prolog, release_date, end_date, movie_status } = req.body
 
-        const [rows] = await db.query('select * from movie where id = ?', [id])
+        const [rows] = await db.query('select * from movie where movie_id = ?', [id])
 
         if (rows.length === 0) {
             return res.status(404).json({ message: '해당 영화를 찾을 수 없습니다.' })
         }
 
-        const existingMovie = row[0]
+        const existingMovie = rows[0]
 
-        const updatePost = post || existingMovie.post
-        const updateTitle = title || existingMovie.title
-        const updateGenre = genre || existingMovie.genre
-        const updateProlog = prolog || existingMovie.prolog
-        const updateReleaseDate = release_date || existingMovie.release_date
-        const updateEndDate = end_date || existingMovie.end_date
-        const updateMovieStatus = movie_status || existingMovie.movie_status
+        const updatePost = (post !== undefined) ? post : existingMovie.post; 
+        const updateTitle = (title !== undefined) ? title : existingMovie.title;
+        const updateGenre = (genre !== undefined) ? genre : existingMovie.genre;
+        const updateProlog = (prolog !== undefined) ? prolog : existingMovie.prolog; 
+        const updateReleaseDate = (release_date !== undefined) ? release_date : existingMovie.release_date;
+        const updateEndDate = (end_date !== undefined) ? end_date : existingMovie.end_date;
+        const updateMovieStatus = (movie_status !== undefined) ? movie_status : existingMovie.movie_status;
 
-        if (new Date(release_date) > new Date(end_date)) {
+        if (new Date(updateReleaseDate) > new Date(updateEndDate)) {
             return res.status(400).json({ message: '개봉일이 종영일보다 늦을 수 없습니다. ' })
         }
 
-        await db.query('update movie set post = ?, title = ?, genre = ?, prolog = ?, release_date = ?, end_date = ?, movie_status = ? where movie_id = ?',
-            [post, title, genre, prolog, release_date, end_date, movie_status, id])
+        await db.query(
+        'update movie set post = ?, title = ?, genre = ?, prolog = ?, release_date = ?, end_date = ?, movie_status = ? where movie_id = ?',
+         [updatePost, updateTitle, updateGenre, updateProlog, updateReleaseDate, updateEndDate, updateMovieStatus, id]
+        )
 
         return res.status(200).json({
             movie_id: id,
@@ -90,7 +93,7 @@ router.patch('/:id', async (req, res) => {
             end_date: updateEndDate,
             movie_status: updateMovieStatus,
         })
-        
+
     } catch (err) {
         return res.status(500).json({
             message: err.message
