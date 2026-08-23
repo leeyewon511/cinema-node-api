@@ -8,6 +8,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/movie', movieRoute)
+app.use('/cinema', cinemaRoute)
 
 app.listen((port), () =>{
     console.log('서버 실행 중')
