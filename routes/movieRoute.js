@@ -9,7 +9,7 @@ router.get('/:id', movieController.getMovieDetail)
 // 관리자 (영화 등록 & 수정 & 삭제)
 router.post('/', movieController.postMovie)
 router.patch('/:id', movieController.updateMovie)
-router.delete(':id', movieController.deleteMovie)
+router.delete('/:id', movieController.deleteMovie)
 
 
 module.exports = router

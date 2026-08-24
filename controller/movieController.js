@@ -7,7 +7,7 @@ exports.getMovie = async(req, res) => {
     try{
         const movie = await movieService.getMovie()
 
-        return res.status(200).json(getMovie)
+        return res.status(200).json(movie)
 
     } catch (err) {
         return res.status(err.status || 500).json({message: err.message})
@@ -33,7 +33,7 @@ exports.getMovieDetail = async(req, res) => {
 // 영화 등록
 exports.postMovie = async(req, res) => {
     try{
-        const movie = await movieService.createMovie(req.body)
+        const movie = await movieService.postMovie(req.body)
 
         return res.status(200).json(movie)
 

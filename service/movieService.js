@@ -2,7 +2,7 @@ const db = require('../db')
 
 // 영화 조회
 const existMovie = async (id) => {
-    const [rows] = await db.query('select * from movie where id = ?', [id])
+    const [rows] = await db.query('select * from movie where movie_id = ?', [id])
 
     if (rows.length === 0){
         const err = new Error('해당 영화를 찾을 수 없습니다.')
@@ -34,7 +34,7 @@ exports.getMovieDetail = async (id) => {
 exports.postMovie = async (movieData) => {
     const { post, title, genre, prolog, release_date, end_date, movie_status } = movieData
 
-    if (!post || ! title || !genre || !prolog || !release_date || !end_date || !movieData){
+    if (!post || ! title || !genre || !prolog || !release_date || !end_date || !movie_status){
         const err = new Error('필수 입력 값을 입력하지 않았습니다.')
         err.status = 400
         throw err
@@ -61,7 +61,7 @@ exports.postMovie = async (movieData) => {
         movie_status
     }         
     
-    return movieData
+    return newMovie
 }
 
 // 영화 수정
@@ -77,7 +77,7 @@ exports.updateMovie = async (id, movieData) => {
 
     const [rows] = await db.query(
         'update movie set post = ?, title = ?, genre = ?, prolog = ?, release_date = ?, end_date = ?, movie_status = ? where movie_id = ?',
-        [updated.post, updated.title, updated.genre, updated.prolog, updated.release_date, updated.end_date, updated.movie_status, id]
+        [update.post, update.title, update.genre, update.prolog, update.release_date, update.end_date, update.movie_status, id]
     )
 
     return {movie_id: id, ...update}
@@ -87,7 +87,7 @@ exports.updateMovie = async (id, movieData) => {
 exports.deleteMovie = async (id) =>{
     const existingMovie = await existMovie(id)
 
-    await db.query('delete from movie where id = ?', [id])
+    await db.query('delete from movie where movie_id = ?', [id])
 
     return {message: '해당 영화가 삭제 되었습니다.'}
 }

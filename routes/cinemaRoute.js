@@ -8,7 +8,7 @@ router.get('/:id', cinemaController.getCinemaDetail)
 
 //관리자(영화 등록 & 수정 & 삭제)
 router.post('/', cinemaController.postCinema)
-router.patch('/:id', cinemaController.updateCinma)
+router.patch('/:id', cinemaController.updateCinema)
 router.delete('/:id', cinemaController.deleteCinema)
 
 module.exports = router

@@ -7,7 +7,7 @@ exports.getCinema = async (req, res) => {
     try{
         const cinema = await cinemaService.getCinema()
 
-        return resizeBy.status(200).json(cinema)
+        return res.status(200).json(cinema)
     } catch (err) {
         return res.status(err.status || 500).json({message: err.message})
     }
