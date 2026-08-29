@@ -39,8 +39,18 @@ const existCinema = async (id) => {
         throw err
     }
 
+    const [exist] = await db.query('select * from cinema where name = ? and address = ? ', [name, address])
+
+    if(exist.length > 0) {
+      const err = new Error('이미 등록된 영화관입니다.')
+      err.status = 409
+      throw err
+    }
+
     const [result] = await db.query('insert into cinema (name, address, phone) values (?, ?, ?)', [name, address, phone])
 
+
+   
     const newCinema = {
         cinema_id: result.insertId,
         name,
