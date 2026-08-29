@@ -15,7 +15,7 @@ app.use('/movies', movieRoute)
 app.use('/cinemas', cinemaRoute)
 app.use('/screens', screenRoute)
 app.use('/seats', seatRoute)
-app.use('/schdules', scheduleRoute)
+app.use('/schedules', scheduleRoute)
 
 app.listen((port), () =>{
     console.log('서버 실행 중')

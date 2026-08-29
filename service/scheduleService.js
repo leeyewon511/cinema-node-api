@@ -10,7 +10,7 @@ const existSchedule = async (id) => {
         throw err
     }
 
-    return row[0]
+    return rows[0]
 }
 
 // 특정 스케줄 좌석 상태 조회
@@ -29,16 +29,16 @@ exports.getScheduleSeat = async(scheduleId) => {
 
     const [rows] = await db.query(`
         select
-            ss.schedule_seat_id,
-            s.seat_id,
+            ss.schedule_seat,
+            s.seat,
             s.seat_row,
-            s.seat_numbert
+            s.seat_number,
             case 
-                when ri.schedule_seat_id is not null then '예약됨' else '가능'
-        from schedule_seat ss join seat s on ss.seat_id = seat_id
-        left join reservation_item ri on ri.schedule_seat_id = ss.schedule_seat_id
+                when ri.schedule_seat_id is not null then '예약됨' else '가능' end as seat_status
+        from schedule_seat ss join seat s on ss.seat_id = s.seat
+        left join reservation_item ri on ri.schedule_seat_id = ss.schedule_seat
         where ss.schedule_id = ?
-        order by s.seat row, s.seat_number
+        order by s.seat_row, s.seat_number
         `, [scheduleId])
 
         // 6. 완성된 자석 상태 목록을 응답한다.
@@ -56,21 +56,21 @@ exports.getSchedule = async (filters) => {
     //    영화 제목, 상영관 이름, 영화관 이름까지 함께 조회되도록 한다.
     let query = `
         select 
-            sc.schedule_id,
+            sc.schedule,
             sc.show_date,
             sc.show_time,
             sc.schedule_status,
             m.movie_id,
             m.title as movie_title,
             m.post as movie_post,
-            s.screen_id,
+            s.screen,
             s.screen_no,
-            c.cinema,
+            c.cinema_id,
             c.name as cinema_name
         from schedule sc
         join movie m on sc.movie_id = m.movie_id
-        join screen s on sc.screen = s.screen
-        join cinema c on s.cinema = c.cinema
+        join screen s on sc.screen_id = s.screen
+        join cinema c on s.cinema_id = c.cinema_id
         where 1=1
     `
     const params = []
@@ -118,13 +118,13 @@ exports.getScheduleDetail = async(id) => {
             m.post as movie_post,
             s.screen,
             s.screen_no,
-            c.cinema,
+            c.cinema_id,
             c.name as cinema_name
         from schedule sc
         join movie m on sc.movie_id = m.movie_id
-        join screen s on sc.screen = s.screen
-        join cinema c on s.cinema = c.cinema
-        wher sc.schedule = ?
+        join screen s on sc.screen_id = s.screen
+        join cinema c on s.cinema_id = c.cinema_id
+        where sc.schedule = ?
         `, [id])
         
         if (rows.length === 0) {
@@ -141,7 +141,7 @@ exports.getScheduleDetail = async(id) => {
 exports.postSchedule = async(scheduleData) => {
     const {show_date, show_time, schedule_status, screen_id, movie_id} = scheduleData
 
-    const exist = await db.query('select * from schedule where show_date = ? and show_time = ? and screen_id = ?',
+    const [exist] = await db.query('select * from schedule where show_date = ? and show_time = ? and screen_id = ?',
                                 [show_date, show_time, screen_id])
 
     if (exist.length > 0) {
@@ -164,11 +164,11 @@ exports.postSchedule = async(scheduleData) => {
 }
 
 // 스케줄 수정
-exports.patchSchedule = async(scheduleId, scheduleData) => {
+exports.updateSchedule = async(scheduleId, scheduleData) => {
     const existingSchedule = await existSchedule(scheduleId)
     const update = {...existingSchedule, ...scheduleData}
 
-    const [result] = await db.query('update schedule set show_date = ?, show_time, schedule_status = ?, screen_id = ?, movie_id = ? where schedule = ?',
+    const [result] = await db.query('update schedule set show_date = ?, show_time = ?, schedule_status = ?, screen_id = ?, movie_id = ? where schedule = ?',
                     [update.show_date, update.show_time, update.schedule_status, update.screen_id, update.movie_id, scheduleId])
     
     return {screen: scheduleId, ...update}

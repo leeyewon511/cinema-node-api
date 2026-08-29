@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const schduleController = require('../controller/scheduleController')
+const scheduleController = require('../controller/scheduleController')
 
 // 회원 & 관리자
 // 특정 스케줄 좌석 상태 조회
-router.get('/:schedule_id/seats', schduleController.getScheduleSeat)
+router.get('/:schedule_id/seats', scheduleController.getScheduleSeat)
 // 스케줄 조회(조건 검색)
-router.get('/', schduleController.getSchedules)
+router.get('/', scheduleController.getSchedule)
 // 스케줄 상세조회
-router.get('/id', scheduleController.getScheduleDetail)
+router.get('/:id', scheduleController.getScheduleDetail)
 
 
 // 관리자
