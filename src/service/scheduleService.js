@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 // 스케줄 존재 여부
 const existSchedule = async (id) => {
@@ -41,7 +41,7 @@ exports.getScheduleSeat = async(scheduleId) => {
         order by s.seat_row, s.seat_number
         `, [scheduleId])
 
-        // 6. 완성된 자석 상태 목록을 응답한다.
+        // 6. 완성된 좌석 상태 목록을 응답한다.
         return rows
 }
 

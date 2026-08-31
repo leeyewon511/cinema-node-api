@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 // 상영관 존재여부
 const existScreen = async (id) =>{

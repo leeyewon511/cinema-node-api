@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 // 해당 상영관 좌석 조회
 exports.getSeat = async (screenId) => {

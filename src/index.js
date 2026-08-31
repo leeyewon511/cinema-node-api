@@ -7,6 +7,7 @@ const cinemaRoute = require('./routes/cinemaRoute')
 const screenRoute = require('./routes/screenRoute')
 const seatRoute = require('./routes/seatRoute')
 const scheduleRoute = require('./routes/scheduleRoute')
+const reservationRoute = require('./routes/reservationRoute')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -16,6 +17,7 @@ app.use('/cinemas', cinemaRoute)
 app.use('/screens', screenRoute)
 app.use('/seats', seatRoute)
 app.use('/schedules', scheduleRoute)
+app.use('/reservations',reservationRoute)
 
 app.listen((port), () =>{
     console.log('서버 실행 중')

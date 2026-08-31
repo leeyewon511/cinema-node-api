@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 const existCinema = async (id) => {
     const [rows] = await db.query('select * from cinema where cinema_id = ?', [id])

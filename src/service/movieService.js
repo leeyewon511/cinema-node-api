@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 // 영화 조회
 const existMovie = async (id) => {
