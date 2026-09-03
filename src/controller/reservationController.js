@@ -14,10 +14,10 @@ exports.createReservation = async(req, res) => {
 }
 
 // 내 예매내역 조회
-exports.getMyReservation = async(req, res) => {
+exports.getMyReservations = async(req, res) => {
     try{
         const memberId = req.query.memberId
-        const list = await reservationService.getMyReservation(memberId)
+        const list = await reservationService.getMyReservations(memberId)
 
         return res.status(200).json(list)
     } catch (err) {

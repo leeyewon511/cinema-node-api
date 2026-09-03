@@ -2,12 +2,12 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const movieRoute = require('./routes/movieRoute')
-const cinemaRoute = require('./routes/cinemaRoute')
-const screenRoute = require('./routes/screenRoute')
-const seatRoute = require('./routes/seatRoute')
-const scheduleRoute = require('./routes/scheduleRoute')
-const reservationRoute = require('./routes/reservationRoute')
+const movieRoute = require('./src/routes/movieRoute')
+const cinemaRoute = require('./src/routes/cinemaRoute')
+const screenRoute = require('./src/routes/screenRoute')
+const seatRoute = require('./src/routes/seatRoute')
+const scheduleRoute = require('./src/routes/scheduleRoute')
+const reservationRoute = require('./src/routes/reservationRoute')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));

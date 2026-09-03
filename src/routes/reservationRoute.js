@@ -6,7 +6,7 @@ const reservationController = require('../controller/reservationController')
 router.post('/', reservationController.createReservation)
 
 // 회원 (내 예매 내역 조회)
-router.get('/my', reservationController.getMyReservation)
+router.get('/my', reservationController.getMyReservations)
 
 // 회원 (예매 취소)
 router.delete('/:id', reservationController.cancelReservation)
