@@ -11,3 +11,14 @@ exports.signup = async(req, res) => {
         return res.status(err.status || 500).json(err.message)
     }
 }
+
+// 로그인
+exports.login = async(req, res) => {
+    try{
+        const {loginId, password} = req.body
+        const result = await authService.login(loginId, password)
+        res.status(200).json(result)
+     } catch (err) {
+        res.status(err.status || 500).json(err.message)
+     }
+}
