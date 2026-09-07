@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-
 const movieRoute = require('./src/routes/movieRoute')
 const cinemaRoute = require('./src/routes/cinemaRoute')
 const screenRoute = require('./src/routes/screenRoute')

@@ -101,3 +101,19 @@ exports.login = async (loginId, password) => {
 
     return {token, name: member.name, role: member.role}
 }
+
+// 내 정보 조회
+exports.getMyInfo = async (memberId) => {
+    const [rows] = await db.query(
+        `SELECT login_id, name, phone
+         FROM member WHERE member = ?`, [memberId]
+    )
+    return rows[0]
+}
+
+// 내 정보 수정
+exports.updateMyInfo = async (memberId, myName, phone) => {
+    await db.query(
+        `UPDATE member SET name = ?, phone = ? WHERE member = ?`, [myName, phone, memberId]
+    )
+}
