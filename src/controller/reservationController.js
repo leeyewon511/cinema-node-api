@@ -3,7 +3,8 @@ const reservationService = require('../service/reservationService')
 // 예매 신청
 exports.createReservation = async(req, res) => {
     try{
-        const {memberId, scheduleId, seatIds} = req.body
+        const memberId = req.user.memberId
+        const {scheduleId, seatIds} = req.body
 
         const result = await reservationService.createReservation(memberId, scheduleId, seatIds)
 
@@ -16,7 +17,7 @@ exports.createReservation = async(req, res) => {
 // 내 예매내역 조회
 exports.getMyReservations = async(req, res) => {
     try{
-        const memberId = req.query.memberId
+        const memberId = req.user.memberId
         const list = await reservationService.getMyReservations(memberId)
 
         return res.status(200).json(list)

@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const reservationController = require('../controller/reservationController')
+const { verifyToken, requireAdmin } = require('../middlewares/authMiddleware'); 
 
 // 회원 (예매 신청)  
 router.post('/', reservationController.createReservation)
@@ -12,6 +13,6 @@ router.get('/my', reservationController.getMyReservations)
 router.delete('/:id', reservationController.cancelReservation)
 
 // 관리자 (전체 예매 현황 조회)
-router.get('/', reservationController.getAllReservations)
+router.get('/', verifyToken, requireAdmin, reservationController.getAllReservations)
 
 module.exports = router
