@@ -1,0 +1,42 @@
+services:
+  # ---------- MySQL 컨테이너 ----------
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      # 이 컨테이너의 MySQL 관리자(root) 비밀번호를 지정한다
+      MYSQL_ROOT_PASSWORD: root1234
+      # 컨테이너가 처음 뜰 때 자동으로 만들어질 데이터베이스 이름
+      MYSQL_DATABASE: mydb
+    ports:
+      # "내컴퓨터포트:컨테이너포트" - 로컬에서 3307로 접속하면 컨테이너 3306으로 연결됨
+      # (로컬에 이미 MySQL이 3306번으로 떠 있을 수 있어서 겹치지 않게 3307로 뺐다)
+      - "3307:3306"
+    volumes:
+      # init.sql을 컨테이너의 특수 폴더에 넣어두면,
+      # MySQL이 "처음 딱 한 번" 뜰 때 이 안의 SQL을 자동으로 실행해서
+      # 테이블과 데이터를 그대로 세팅해준다
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # 컨테이너를 껐다 켜도 데이터가 사라지지 않도록 저장 공간을 따로 유지
+      - db_data:/var/lib/mysql
+
+  # ---------- Node 앱 컨테이너 ----------
+  app:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # 코드에서 process.env.XXX로 쓰던 값들을 여기서 넘겨준다
+      DB_HOST: db          # 같은 docker-compose 안에서는 "서비스 이름"이 곧 호스트 주소가 된다
+      DB_USER: root
+      DB_PASSWORD: root1234
+      DB_NAME: mydb
+      DB_PORT: 3306   
+      JWT_SECRET: leeyewon1234!@#
+    depends_on:
+      # db 컨테이너가 먼저 뜬 다음에 app 컨테이너를 띄우라는 순서 지정
+      - db
+
+volumes:
+  db_data:
