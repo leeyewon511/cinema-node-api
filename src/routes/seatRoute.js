@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const seatController = require('../controller/seatcontroller')
+const seatController = require('../controller/seatController')
 const { route } = require('./movieRoute')
 
 // 관리자 (좌석 조회 & 등록 & 삭제)
